@@ -88,9 +88,30 @@ app.put('/api/users/:id', (req, res)=>{
         res.status(400).json({
             errorMessage: "Please provide name and bio for the user."
         })
-    }
+    } 
+})
 
-    
+
+app.delete('/api/users/:id', (req, res)=>{
+    const id = req.params.id;
+
+    db.remove(id)
+        .then(data => {
+            if(data){
+                res.status(200).json({
+                    message: "user deleted"
+                })
+            } else {
+                res.status(404).json({
+                    message: "The user with the specified ID does not exist."
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: "The user could not be removed"
+            })
+        })
 })
 
 app.listen(process.env.PORT || 3000, ()=>{
