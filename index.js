@@ -50,7 +50,9 @@ app.post('/api/users', (req,res) => {
     if(user.name && user.bio){
         db.insert(user)
         .then(data => {
-            res.status(201).json(data)
+            db.findById(data.id).then(createdUser=> {
+                res.status(200).json(createdUser)
+            })
         })
         .catch(err => {
             res.status(500).json({
@@ -73,7 +75,9 @@ app.put('/api/users/:id', (req, res)=>{
         db.update(id,update)
         .then(user => {
             if(user){
-                res.status(200).json(user)
+                db.findById(id).then(updatedUser=> {
+                    res.status(200).json(updatedUser)
+                })
             } else {
                 res.status(404).json({
                     message: "The user with the specified ID does not exist."
